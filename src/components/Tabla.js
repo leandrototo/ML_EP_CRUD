@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 import Table from 'react-bootstrap/Table'
-// import InputUpdate from './InputUpdate'
 import './Tabla.css'
-import { FormContext } from '../FormContext'
+import { FormContext } from '../context/FormContext'
 
 import { IoIosCheckboxOutline, IoIosSquareOutline } from "react-icons/io";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 export default function Tabla() {
 
-    const [entradas] = useContext(FormContext)
+    const [state, dispatch] = useContext(FormContext)
 
     return (
         <React.Fragment>
@@ -36,7 +35,7 @@ export default function Tabla() {
                     </tr>
                 </thead>
                 <tbody>
-                    {entradas.map((item) =>
+                    {state.EPs.map((item) =>
                         <tr>
                             <td>{item.nombre}</td>
                             <td>{item.apellido}</td>

@@ -1,44 +1,43 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { FormContext } from '../FormContext'
 import { useForm } from 'react-hook-form';
+import { FormContext } from '../context/FormContext'
+
 // import firebase from '../firebase'
-import firebaseDb from '../firebase'
+// import firebaseDb from '../firebase'
 
 const Formulario = () => {
 
-  const initialValue = {
-    nombre: '',
-    apellido: '',
-    pdo: '',
-    pda: '',
-    circ: '',
-    secc: '',
-    chacra: '',
-    quinta: '',
-    fracc: '',
-    mza: '',
-    parc: '',
-    subparc: '',
-    recibido: '',
-    medido: '',
-    confeccionado: ''
-  }
+  const [state, dispatch] = useContext(FormContext);
+  // console.log(useContext);
+
   //Context de entradas
-  const [formInputs, setFormInputs] = useState(initialValue)
-  const [entradas, setEntradas] = useContext(FormContext)
+  // const [formInputs, setFormInputs] = useState(initialValue)
 
   // hook de React-Form
-  const { register, errors, handleSubmit } = useForm();
-  const onSubmit = (data, e) => {
-    setEntradas([
-      ...entradas, data
-    ])
-    // const db = firebase.firestore();
-    // db.collection('info').add(data)
+  const { register, errors, handleSubmit, setValue } = useForm();
 
-    e.target.reset();
+  const onSubmit = (data, e) => {
+    dispatch({
+      type: "ADD_EP",
+      payload: data
+    });
+    console.log()
+    //ResetValues
+    setValue([{ nombre: '' }, { apellido: '' },
+    { pdo: '' }, { pda: '' }, { circ: '' }, { secc: '' }, { chacra: '' }, { quinta: '' }, { fracc: '' },
+    { mza: '' }, { parc: '' }, { subparc: '' }, { recibido: '' }, { medido: '' }, { confeccionado: '' }]);
   }
+
+  // const onSubmit = (data, e) => {
+  // setEntradas([
+  //   ...entradas, data
+  // ])
+  // const db = firebase.firestore();
+  // db.collection('info').add(data)
+
+  // e.target.reset();
+  // }
 
   return (
     <React.Fragment>
@@ -50,7 +49,7 @@ const Formulario = () => {
               <Form.Label>Nombre</Form.Label>
               <Form.Control ref={register({
                 required: { value: true, message: 'Nombre Obligatorio' }
-              })} name="nombre" type="text" placeholder="Nombre" value='HolaNombre' />
+              })} name="nombre" type="text" placeholder="Nombre" />
             </Form.Group>
             <span className="text-danger text-small d-block mb-2">
               {errors?.nombre?.message}
@@ -162,10 +161,32 @@ const Formulario = () => {
           <Button variant="primary" type="submit">
             Guardar
                     </Button>
+
         </Row>
       </Form>
+      <button onClick={() => console.log(state.EPs)}>clg</button>
     </React.Fragment>
   )
 }
 
 export default Formulario;
+
+
+
+// const initialValue = {
+//   nombre: '',
+//   apellido: '',
+//   pdo: '',
+//   pda: '',
+//   circ: '',
+//   secc: '',
+//   chacra: '',
+//   quinta: '',
+//   fracc: '',
+//   mza: '',
+//   parc: '',
+//   subparc: '',
+//   recibido: '',
+//   medido: '',
+//   confeccionado: ''
+// }
