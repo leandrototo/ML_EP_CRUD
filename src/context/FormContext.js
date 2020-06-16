@@ -6,8 +6,8 @@ export const FormContext = createContext();
 // Simulo recibir de BD (valores)
 const initialState = {
   EPs: [{
-    nombre: 'Leandro',
-    apellido: 'Toto',
+    nombre: 'Juanctio',
+    apellido: 'Rodriguez',
     pdo: '117',
     pda: '12345',
     circ: '',
@@ -46,6 +46,15 @@ const reducer = (state, action) => {
     case 'ADD_EP':
       return {
         EPs: [...state.EPs, action.payload]
+      };
+    case 'DEL_EP':
+      return {
+        EPs: state.EPs.filter((item) => (item.pdo !== action.payload.pdo) || (item.pda !== action.payload.pda))
+      };
+    case 'UPD_EP':
+      const filtrado = state.EPs.filter((item) => (item.pdo !== action.payload.pdo) || (item.pda !== action.payload.pda))
+      return {
+        EPs: [...filtrado, action.payload]
       };
     default:
       throw new Error();

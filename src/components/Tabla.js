@@ -4,15 +4,14 @@ import './Tabla.css'
 import { FormContext } from '../context/FormContext'
 
 import { IoIosCheckboxOutline, IoIosSquareOutline } from "react-icons/io";
-import { FaEdit, FaTrash } from "react-icons/fa";
 
-export default function Tabla() {
+export default function Tabla(props) {
 
     const [state, dispatch] = useContext(FormContext)
 
     return (
         <React.Fragment>
-            <Table striped bordered hover size="sm">
+            <Table striped bordered hover size="sm" className="mt-4">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -31,12 +30,13 @@ export default function Tabla() {
                         <th>Med</th>
                         <th>Conf</th>
                         <th>Env</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {state.EPs.map((item) =>
-                        <tr>
+                        <tr key={item.pdo + item.pda}
+                            onClick={() => props.handleSelectedEP(item)}
+                        >
                             <td>{item.nombre}</td>
                             <td>{item.apellido}</td>
                             <td>{item.pdo}</td>
@@ -49,17 +49,10 @@ export default function Tabla() {
                             <td>{item.mza}</td>
                             <td>{item.parc}</td>
                             <td>{item.subparc}</td>
-                            <td>
-                                {/* <InputUpdate item={item} /> */}
-                                {item.recibido ? <IoIosCheckboxOutline /> : < IoIosSquareOutline />}
-                            </td>
+                            <td>{item.recibido ? <IoIosCheckboxOutline /> : < IoIosSquareOutline />}</td>
                             <td>{item.medido ? <IoIosCheckboxOutline /> : < IoIosSquareOutline />}</td>
                             <td>{item.confeccionado ? <IoIosCheckboxOutline /> : < IoIosSquareOutline />}</td>
                             <td>{item.enviado ? <IoIosCheckboxOutline /> : < IoIosSquareOutline />}</td>
-                            <td>
-                                <a className="text-dark mr-2"> <FaEdit /> </a>
-                                <a><FaTrash /></a>
-                            </td>
                         </tr>
                     )}
                 </tbody>

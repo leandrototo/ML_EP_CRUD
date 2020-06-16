@@ -1,15 +1,13 @@
 import React from 'react';
-import './App.css';
 import Formulario from './components/Formulario';
-import Tabla from './components/Tabla';
 import { FormProvider } from "./context/FormContext";
+import './App.css'
 
 function App() {
   return (
     <div className="App container">
       <FormProvider >
         <Formulario />
-        <Tabla />
       </FormProvider>
     </div>
   );

@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+.seleccionada {
+  background-color: red;
+}
+
+#titulo {
+  margin-top: 0.5em;
+}
+
+.botonera {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 0.5em;
+  padding: 0 15em;
+}
+
+.bot {
+  width: 33%;
+}

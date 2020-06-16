@@ -1,52 +1,68 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { FormContext } from '../context/FormContext'
-
-// import firebase from '../firebase'
-// import firebaseDb from '../firebase'
+import Tabla from "./Tabla";
 
 const Formulario = () => {
 
   const [state, dispatch] = useContext(FormContext);
-  // console.log(useContext);
 
-  //Context de entradas
-  // const [formInputs, setFormInputs] = useState(initialValue)
-
+  const [selectedEP, setSelectedEP] = useState(initialValue);
   // hook de React-Form
-  const { register, errors, handleSubmit, setValue } = useForm();
+  const { register, errors, handleSubmit, setValue, reset } = useForm({ defaultValues: initialValue });
 
   const onSubmit = (data, e) => {
-    dispatch({
-      type: "ADD_EP",
-      payload: data
-    });
-    console.log()
-    //ResetValues
-    setValue([{ nombre: '' }, { apellido: '' },
-    { pdo: '' }, { pda: '' }, { circ: '' }, { secc: '' }, { chacra: '' }, { quinta: '' }, { fracc: '' },
-    { mza: '' }, { parc: '' }, { subparc: '' }, { recibido: '' }, { medido: '' }, { confeccionado: '' }]);
+    if (!selectedEP.nombre) {
+      dispatch({
+        type: "ADD_EP",
+        payload: data
+      });
+      reset(initialValue);
+    } else {
+      dispatch({
+        type: "UPD_EP",
+        payload: data
+      });
+      reset(initialValue);
+    }
   }
 
-  // const onSubmit = (data, e) => {
-  // setEntradas([
-  //   ...entradas, data
-  // ])
-  // const db = firebase.firestore();
-  // db.collection('info').add(data)
+  const onDelete = data => {
+    dispatch({
+      type: "DEL_EP",
+      payload: selectedEP
+    });
+    reset(initialValue);
+    setSelectedEP(initialValue);
+  }
 
-  // e.target.reset();
-  // }
 
+  const handleSelectedEP = (EP) => {
+    setSelectedEP(EP);
+    console.log(EP);
+  }
+
+  useEffect(() => {
+    setValue([{ nombre: selectedEP.nombre }, { apellido: selectedEP.apellido },
+    { pdo: selectedEP.pdo }, { pda: selectedEP.pda }, { circ: selectedEP.circ }, { secc: selectedEP.secc }, { chacra: selectedEP.chacra }, { quinta: selectedEP.quinta }, { fracc: selectedEP.fracc },
+    { mza: selectedEP.mza }, { parc: selectedEP.parc }, { subparc: selectedEP.subparc }, { recibido: selectedEP.recibido }, { medido: selectedEP.medido }, { confeccionado: selectedEP.confeccionado }]);
+    // return () => {
+    //   console.log('Desmonta');
+    // }
+  }, [selectedEP])
+
+  const handleCancel = () => {
+    reset(initialValue);
+    setSelectedEP(initialValue);
+  }
   return (
     <React.Fragment>
-      <h2>Formulario de ingreso</h2>
+      <h2 id="titulo">Formulario de ingreso</h2>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
           <Col>
             <Form.Group controlId="formBasicNombre">
-              <Form.Label>Nombre</Form.Label>
               <Form.Control ref={register({
                 required: { value: true, message: 'Nombre Obligatorio' }
               })} name="nombre" type="text" placeholder="Nombre" />
@@ -57,7 +73,6 @@ const Formulario = () => {
           </Col>
           <Col>
             <Form.Group controlId="formBasicApellido">
-              <Form.Label>Apellido</Form.Label>
               <Form.Control ref={register({
                 required: { value: true, message: 'Apellido Obligatorio' }
               })} name="apellido" type="text" placeholder="Apellido" />
@@ -71,10 +86,9 @@ const Formulario = () => {
         <Row>
           <Col>
             <Form.Group controlId="formBasicPartido">
-              <Form.Label>Pdo</Form.Label>
               <Form.Control ref={register({
                 required: { value: true, message: 'Pdo Obligatorio' }
-              })} name="pdo" type="text" placeholder="117" />
+              })} name="pdo" type="text" placeholder="Pdo" />
             </Form.Group>
             <span className="text-danger text-small d-block mb-2">
               {errors?.pdo?.message}
@@ -82,56 +96,47 @@ const Formulario = () => {
           </Col>
           <Col>
             <Form.Group controlId="formBasicPartida">
-              <Form.Label>Pda</Form.Label>
-              <Form.Control ref={register} name="pda" type="text" placeholder="12345" />
+              <Form.Control ref={register} name="pda" type="text" placeholder="Pda" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicCirc">
-              <Form.Label>Circ</Form.Label>
-              <Form.Control ref={register} name="circ" type="text" placeholder="V" />
+              <Form.Control ref={register} name="circ" type="text" placeholder="Circ" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicSecc">
-              <Form.Label>Secc</Form.Label>
-              <Form.Control ref={register} name="secc" type="text" placeholder="D" />
+              <Form.Control ref={register} name="secc" type="text" placeholder="Secc" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicChacra">
-              <Form.Label>Chacra</Form.Label>
-              <Form.Control ref={register} name="chacra" type="text" placeholder="123" />
+              <Form.Control ref={register} name="chacra" type="text" placeholder="Chacra" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicQuinta">
-              <Form.Label>Quinta</Form.Label>
-              <Form.Control ref={register} name="quinta" type="text" placeholder="12" />
+              <Form.Control ref={register} name="quinta" type="text" placeholder="Quinta" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicFracc">
-              <Form.Label>Fracc</Form.Label>
-              <Form.Control ref={register} name="fracc" type="text" placeholder="123" />
+              <Form.Control ref={register} name="fracc" type="text" placeholder="Fracc" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicMza">
-              <Form.Label>Mza</Form.Label>
-              <Form.Control ref={register} name="mza" type="text" placeholder="123" />
+              <Form.Control ref={register} name="mza" type="text" placeholder="Mza" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicParc">
-              <Form.Label>Parc</Form.Label>
-              <Form.Control ref={register} name="parc" type="text" placeholder="12" />
+              <Form.Control ref={register} name="parc" type="text" placeholder="Parc" />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="formBasicSubParc">
-              <Form.Label>SubParc</Form.Label>
-              <Form.Control ref={register} name="subparc" type="text" placeholder="b" />
+              <Form.Control ref={register} name="subparc" type="text" placeholder="SubParc" />
             </Form.Group>
           </Col>
         </Row>
@@ -157,36 +162,34 @@ const Formulario = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Row>
-          <Button variant="primary" type="submit">
-            Guardar
-                    </Button>
-
+        <Row className="botonera">
+          {selectedEP.nombre === '' ? <Button variant="outline-primary bot" type="submit">Guardar</Button> : <Button variant="outline-primary bot" type="submit">Guarda Cambios</Button>}
+          <Button variant="outline-danger bot" onClick={onDelete}>Eliminar</Button>
+          <Button variant="outline-success bot" onClick={handleCancel}>Limpiar</Button>
         </Row>
       </Form>
-      <button onClick={() => console.log(state.EPs)}>clg</button>
+
+      <Tabla handleSelectedEP={handleSelectedEP} />
     </React.Fragment>
   )
 }
 
 export default Formulario;
 
-
-
-// const initialValue = {
-//   nombre: '',
-//   apellido: '',
-//   pdo: '',
-//   pda: '',
-//   circ: '',
-//   secc: '',
-//   chacra: '',
-//   quinta: '',
-//   fracc: '',
-//   mza: '',
-//   parc: '',
-//   subparc: '',
-//   recibido: '',
-//   medido: '',
-//   confeccionado: ''
-// }
+const initialValue = {
+  nombre: '',
+  apellido: '',
+  pdo: '',
+  pda: '',
+  circ: '',
+  secc: '',
+  chacra: '',
+  quinta: '',
+  fracc: '',
+  mza: '',
+  parc: '',
+  subparc: '',
+  recibido: '',
+  medido: '',
+  confeccionado: ''
+}
